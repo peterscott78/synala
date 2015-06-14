@@ -1,0 +1,300 @@
+
+DROP TABLE IF EXISTS alerts;
+DROP TABLE IF EXISTS auth_sessions;
+DROP TABLE IF EXISTS config;
+DROP TABLE IF EXISTS coin_addresses_multisig;
+DROP TABLE IF EXISTS coin_mempool;
+DROP TABLE IF EXISTS coin_overpayments;
+DROP TABLE IF EXISTS coin_pending_payment;
+DROP TABLE IF EXISTS coin_unauthorized_sends;
+DROP TABLE IF EXISTS coin_sends_addresses;
+DROP TABLE IF EXISTS coin_sends;
+DROP TABLE IF EXISTS coin_addresses;
+DROP TABLE IF EXISTS coin_inputs;
+DROP TABLE IF EXISTS invoices;
+DROP TABLE IF EXISTS notifications;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS products_images;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS users_custom_fields;
+DROP TABLE IF EXISTS users_groups;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS coin_wallets_keys;
+DROP TABLE IF EXISTS coin_wallets;
+
+CREATE TABLE config (
+	name VARCHAR(100) NOT NULL, 
+	value TEXT NOT NULL
+);
+
+INSERT INTO config (name, value) VALUES ('timezone', 'America/New_York');
+INSERT INTO config (name, value) VALUES ('session_expire_mins', '60');
+INSERT INTO config (name, value) VALUES ('username_field', 'username');
+INSERT INTO config (name, value) VALUES ('mcrypt_algorithm', 'none');
+INSERT INTO config (name, value) VALUES ('btc_rpc_host', '127.0.0.1');
+INSERT INTO config (name, value) VALUES ('btc_rpc_user', '');
+INSERT INTO config (name, value) VALUES ('btc_rpc_pass', '');
+INSERT INTO config (name, value) VALUES ('btc_rpc_port', '');
+INSERT INTO config (name, value) VALUES ('site_name', 'Envrin Group');
+INSERT INTO config (name, value) VALUES ('company_name', 'Envrin Group');
+INSERT INTO config (name, value) VALUES ('currency', 'USD');
+INSERT INTO config (name, value) VALUES ('payment_expire_seconds', '300');
+INSERT INTO config (name, value) VALUES ('exchange_rate', '0');
+INSERT INTO config (name, value) VALUES ('btc_minconf', '2');
+INSERT INTO config (name, value) VALUES ('btc_txfee', '0.0001');
+INSERT INTO config (name, value) VALUES ('enable_full_name', '0');
+INSERT INTO config (name, value) VALUES ('enable_2fa', 'none');
+INSERT INTO config (name, value) VALUES ('ipallow', '');
+INSERT INTO config (name, value) VALUES ('backup_type', 'local');
+INSERT INTO config (name, value) VALUES ('backup_amazon_access_key', '');
+INSERT INTO config (name, value) VALUES ('backup_amazon_secret_key', '');
+INSERT INTO config (name, value) VALUES ('backup_ftp_type', 'ftp');
+INSERT INTO config (name, value) VALUES ('backup_ftp_host', '');
+INSERT INTO config (name, value) VALUES ('backup_ftp_user', '');
+INSERT INTO config (name, value) VALUES ('backup_ftp_pass', '');
+INSERT INTO config (name, value) VALUES ('backup_ftp_port', '21');
+INSERT INTO config (name, value) VALUES ('backup_tarsnap_location', '/usr/bin/tarsnap');
+INSERT INTO config (name, value) VALUES ('backup_tarsnap_archive', '');
+INSERT INTO config (name, value) VALUES ('backup_expire_days', '5');
+INSERT INTO config (name, value) VALUES ('is_setup', '0');
+
+
+CREATE TABLE notifications (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	is_enabled TINYINT(1) NOT NULL DEFAULT 1, 
+	recipient ENUM('admin','user') NOT NULL DEFAULT 'admin', 
+	action VARCHAR(50) NOT NULL, 
+	display_name VARCHAR(255) NOT NULL, 
+	content_type ENUM('text/plain', 'text/html') NOT NULL DEFAULT 'text/plain', 
+	subject VARCHAR(255) NOT NULL, 
+	contents LONGTEXT NOT NULL
+) engine=InnoDB;
+
+INSERT INTO notifications VALUES (0, 1, 'admin', 'new_deposit', 'New Deposit Received', 'text/plain', 'New Bitcoin Deposit - ~site_name~', 'QSBuZXcgQml0Y29pbiBwYXltZW50IGhhcyBiZWVuIGp1c3QgcmVjZWl2ZWQuICBEZXRhaWxzIGFyZSBiZWxvdzoNCg0KVXNlcm5hbWU6ICAgICAgfnVzZXJuYW1lfg0KQWRkcmVzczogICAgICAgfmFkZHJlc3N+DQpBbW91bnQ6ICAgICAgICB+YW1vdW50fg0KVHhpZDogICAgICAgICAgfnR4aWR+DQpEYXRlOiAgICAgICAgICB+ZGF0ZV9hZGRlZH4NCg0KUHJvZHVjdCBOYW1lOiAgfnByb2R1Y3RfbmFtZX4NCkludm9pY2U6ICAgICAgIH5pbnZvaWNlX25hbWV+DQoNCi0tIEVORCAtLQ0K');
+INSERT INTO notifications VALUES (0, 1, 'admin', 'funds_sent', 'Funds Sent', 'text/plain', 'Bitcoin Funds Sent - ~site_name~', 'DQpGdW5kcyBoYXZlIGJlZW4gc2VudCBmcm9tIHlvdXIgc2l0ZS4gIEJlbG93IHNob3dzIGRldGFpbHMgb2YgdGhlIHNlbmQ6DQoNCklEIzogICAgICB+c2VuZF9pZH4NCldhbGxldDogICB+d2FsbGV0X25hbWV+DQpBbW91bnQ6ICAgfmFtb3VudH4NClR4aWQ6ICAgICB+dHhpZH4NCg0KLS0gUkVDSVBJRU5UUyAtLQ0KDQp+cmVjaXBpZW50c34NCg0KLS0gRU5EIC0tDQoNCg==');
+INSERT INTO notifications VALUES (0, 1, 'admin', 'product_purchase', 'New Product Purchased', 'text/plain', 'New Product Purchased - ~product_name~ - ~site_name~', 'QSBuZXcgcHJvZHVjdCBoYXMgYmVlbiBwdXJjaGFzZWQuICBEZXRhaWxzIGFyZSBiZWxvdzoNCg0KVXNlcm5hbWU6ICAgICAgfnVzZXJuYW1lfg0KQW1vdW50OiAgICAgICAgfmFtb3VudH4NCkFkZHJlc3M6ICAgICAgIH5hZGRyZXNzfg0KVHhpZDogICAgICAgICAgfnR4aWR+DQpEYXRlOiAgICAgICAgICB+ZGF0ZV9hZGRlZH4NCg0KUHJvZHVjdCBOYW1lOiAgfnByb2R1Y3RfbmFtZX4NCkludm9pY2U6ICAgICAgIH5pbnZvaWNlX25hbWV+DQoNCi0tIEVORCAtLQ0K');
+INSERT INTO notifications VALUES (0, 1, 'admin', 'invoice_paid', 'Invoice Paid', 'text/plain', 'Invoice Paid - ~username~ - ~site_name~', 'QSBwZW5kaW5nIGludm9pY2UgaGFzIGp1c3QgYmVlbiBwYWlkLiAgRGV0YWlscyBhcmUgYmVsb3c6DQoNClVzZXJuYW1lOiAgICAgIH51c2VybmFtZX4NCkFtb3VudDogICAgICAgIH5hbW91bnR+DQpBZGRyZXNzOiAgICAgICB+YWRkcmVzc34NClR4aWQ6ICAgICAgICAgIH50eGlkfg0KRGF0ZTogICAgICAgICAgfmRhdGVfYWRkZWR+DQoNClByb2R1Y3QgTmFtZTogIH5wcm9kdWN0X25hbWV+DQpJbnZvaWNlOiAgICAgICB+aW52b2ljZV9uYW1lfg0KDQotLSBFTkQgLS0NCg==');
+INSERT INTO notifications VALUES (0, 1, 'user', 'new_deposit', 'New Deposit Received', 'text/plain', 'Payment Received - ~site_name~', 'DQpIZWxsbyB+dXNlcm5hbWV+LA0KDQpXZSBoYXZlIHN1Y2Nlc3NmdWxseSByZWNlaXZlZCB5b3VyIGRlcG9zaXQgb2YgfmFtb3VudH4gQlRDLCBhbmQgaXMgaGFzIGJlZW4gcmVjb3JkZWQgaW4gb3VyIHN5c3RlbS4NCg0KVGhhbmsgeW91LA0KfnNpdGVfbmFtZX4NCg==');
+INSERT INTO notifications VALUES (0, 1, 'user', 'product_purchase', 'New Product Purchased', 'text/plain', 'Product Purchase Received - ~product_name~ - ~site_name~', 'DQpIZWxsbyB+dXNlcm5hbWV+LA0KDQpUaGlzIGlzIGEgY29uZmlybWF0aW9uIGUtbWFpbCB0aGF0IHdlIGhhdmUgc3VjY2Vzc2Z1bGx5IHJlY2VpdmVkIHlvdXIgcGF5bWVudCBvZiB+YW1vdW50fiBCVEMgZm9yIHRoZSBwdXJjaGFzZSBvZiBwcm9kdWN0IH5wcm9kdWN0X25hbWV+LiAgSWYgeW91IGhhdmUgbm90IGFscmVhZHkgcmVjZWl2ZWQgdGhlIHByb2R1Y3QgcHVyY2hhc2VkLCB3ZSB3aWxsIHByb2Nlc3MgeW91ciBvcmRlciBzaG9ydGx5Lg0KDQpUaGFuayB5b3UsDQp+c2l0ZV9uYW1lfg0K');
+INSERT INTO notifications VALUES (0, 1, 'user', 'invoice_created', 'Invoice Created', 'text/plain', 'Invoice Created - ~site_name~', 'DQpIZWxsbyB+dXNlcm5hbWV+LA0KDQpBIG5ldyBpbnZvaWNlIGhhcyBiZWVuIGNyZWF0ZWQgYWdhaW5zdCB5b3VyIGFjY291bnQgZm9yIGEgdG90YWwgb2YgfmFtb3VudF9idGN+IEJUQy4gICh+YW1vdW50fiBVU0QpLiAgWW91IG1heSBwYXkgdGhlIGludm9pY2UgYW55IHRpbWUgYnkgdmlzaXRpbmcgdGhlIGJlbG93IFVSTDoNCiAgICAgICB+cGF5X3VybH4NCg0KVGhlIG5vdGUgYXR0YWNoZWQgdG8gdGhlIGludm9pY2UgaXM6DQoNCn5ub3Rlfg0KDQpUaGFuayB5b3UsDQp+c2l0ZV9uYW1lfg0K');
+INSERT INTO notifications VALUES (0, 1, 'user', 'invoice_paid', 'Invoice Paid', 'text/plain', 'Invoice Paid - ~site_name~', 'DQpIZWxsbyB+dXNlcm5hbWV+LA0KDQpUaGFuayB5b3UsIHdlIGhhdmUgc3VjY2Vzc2Z1bGx5IHJlY2VpdmVkIHlvdXIgcGF5bWVudCBvZiB+YW1vdW50X2J0Y34gQlRDIGZvciBpbnZvaWNlICN+aW52b2ljZV9pZH4uDQoNClRoYW5rIHlvdSwNCn5zaXRlX25hbWV+DQo=');
+
+CREATE TABLE alerts (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	is_new TINYINT(1) NOT NULL DEFAULT 1, 
+	userid INT NOT NULL, 
+	type ENUM('new_user', 'new_deposit', 'product_purchase', 'invoice_paid') NOT NULL, 
+	reference_id INT NOT NULL, 
+	date_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) engine=InnoDB;
+
+CREATE TABLE auth_sessions (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	userid INT NOT NULL, 
+	last_active INT NOT NULL DEFAULT 0, 
+	login_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+	logout_date TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00', 
+	auth_hash VARCHAR(130) NOT NULL UNIQUE
+) engine=InnoDB;
+
+CREATE TABLE users_groups (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	name VARCHAR(255) NOT NULL, 
+	description TEXT NOT NULL
+) engine=InnoDB;
+
+INSERT INTO users_groups (name, description) VALUES ('Administrator', '');
+INSERT INTO users_groups (name, description) VALUES ('Member', '');
+INSERT INTO users_groups (name, description) VALUES ('Guest', '');
+
+CREATE TABLE users_custom_fields (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	form_field ENUM('text','textarea','boolean','select') NOT NULL DEFAULT 'text', 
+	display_name VARCHAR(255) NOT NULL, 
+	options MEDIUMTEXT NOT NULL
+) engine=InnoDB;
+
+CREATE TABLE users (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	username VARCHAR(100) NOT NULL UNIQUE, 
+	full_name VARCHAR(255) NOT NULL DEFAULT '', 
+	email VARCHAR(255) NOT NULL DEFAULT '', 
+	password VARCHAR(255) NOT NULL DEFAULT '', 
+	group_id INT NOT NULL, 
+	status ENUM('active','inactive','deleted') NOT NULL DEFAULT 'active', 
+	reg_ip VARCHAR(40) NOT NULL DEFAULT '127.0.0.1', 
+	date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+	custom_fields TEXT NOT NULL
+) engine=InnoDB;
+
+CREATE TABLE coin_wallets (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	status ENUM('active','inactive') NOT NULL DEFAULT 'active', 
+	address_type ENUM('standard','multisig') NOT NULL DEFAULT 'standard', 
+	sigs_required SMALLINT NOT NULL DEFAULT 0, 
+	sigs_total SMALLINT NOT NULL DEFAULT 0, 
+	date_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+	display_name VARCHAR(255) NOT NULL
+) engine=InnoDB;
+
+CREATE TABLE coin_wallets_keys (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	wallet_id INT NOT NULL, 
+	address_num INT NOT NULL DEFAULT 0, 
+	public_key TEXT NOT NULL, 
+	FOREIGN KEY (wallet_id) REFERENCES coin_wallets(id) ON DELETE CASCADE
+) engine = InnoDB;
+
+CREATE TABLE coin_addresses (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	wallet_id INT NOT NULL, 
+	key_id INT NOT NULL, 
+	userid INT NOT NULL DEFAULT 0, 
+	is_used TINYINT(1) NOT NULL DEFAULT 0, 
+	is_change_address TINYINT(1) NOT NULL DEFAULT 0, 
+	address_num INT NOT NULL DEFAULT 0, 
+	total_input DECIMAL(16,8) NOT NULL DEFAULT 0, 
+	total_output DECIMAL(16,8) NOT NULL DEFAULT 0, 
+	address VARCHAR(80) NOT NULL UNIQUE, 
+	date_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+	FOREIGN KEY (wallet_id) REFERENCES coin_wallets (id) ON DELETE CASCADE
+) engine=InnoDB;
+
+CREATE TABLE coin_addresses_multisig (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	key_id INT NOT NULL, 
+	address VARCHAR(80) NOT NULL, 
+	address_num INT NOT NULL, 
+	child_address VARCHAR(80) NOT NULL, 
+	FOREIGN KEY (key_id) REFERENCES coin_wallets_keys (id) ON DELETE CASCADE, 
+	FOREIGN KEY (address) REFERENCES coin_addresses (address) ON DELETE CASCADE
+) engine=InnoDB;
+
+CREATE TABLE coin_pending_payment (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	wallet_id INT NOT NULL DEFAULT 0, 
+	userid INT NOT NULL DEFAULT 0, 
+	item_id INT NOT NULL DEFAULT 0, 
+	status ENUM('pending','approved','expired') NOT NULL DEFAULT 'pending', 
+	amount DECIMAL(12,2) NOT NULL DEFAULT 0, 
+	amount_btc DECIMAL(16,8) NOT NULL DEFAULT 0, 
+	amount_received DECIMAL(16,8) NOT NULL DEFAULT 0, 
+	payment_address VARCHAR(80) NOT NULL, 
+	expire_time INT NOT NULL, 
+	pay_hash VARCHAR(255) NOT NULL, 
+	date_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP 
+) engine=InnoDB;
+
+CREATE TABLE coin_mempool (
+	txid VARCHAR(255) NOT NULL, 
+	vout INT NOT NULL
+) engine=InnoDB;
+
+CREATE TABLE coin_inputs (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	is_new TINYINT(1) NOT NULL DEFAULT 1, 
+	userid INT NOT NULL, 
+	wallet_id INT NOT NULL, 
+	product_id INT NOT NULL DEFAULT 0, 
+	order_id INT NOT NULL DEFAULT 0, 
+	invoice_id INT NOT NULL DEFAULT 0, 
+	is_confirmed TINYINT(1) NOT NULL DEFAULT 0, 
+	is_spent TINYINT(1) NOT NULL DEFAULT 0, 
+	is_change TINYINT(1) NOT NULL DEFAULT 0, 
+	is_locked TINYINT(1) NOT NULL DEFAULT 0, 
+	confirmations SMALLINT NOT NULL DEFAULT 0, 
+	blocknum INT NOT NULL DEFAULT 0, 
+	address VARCHAR(80) NOT NULL, 
+	txid VARCHAR(100) NOT NULL, 
+	vout INT NOT NULL DEFAULT 0, 
+	amount DECIMAL(16,8) NOT NULL, 
+	date_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+	hash VARCHAR(128) NOT NULL UNIQUE
+) engine=InnoDB;
+
+CREATE TABLE coin_sends (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	wallet_id INT NOT NULL, 
+	status ENUM('pending','sent','cancelled') NOT NULL DEFAULT 'pending', 
+	amount DECIMAL(16,8) NOT NULL, 
+	txid VARCHAR(255) NOT NULL DEFAULT '', 
+	date_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+	note VARCHAR(255) NOT NULL DEFAULT ''
+) engine=InnoDB;
+
+CREATE TABLE coin_sends_addresses (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	send_id INT NOT NULL, 
+	amount DECIMAL(16,8) NOT NULL, 
+	address VARCHAR(80) NOT NULL, 
+	FOREIGN KEY (send_id) REFERENCES coin_sends (id) ON DELETE CASCADE
+) engine=InnoDB;
+
+CREATE TABLE coin_overpayments (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	userid INT NOT NULL, 
+	input_id INT NOT NULL, 
+	amount_btc DECIMAL(16,8) NOT NULL, 
+	date_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+	FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE, 
+	FOREIGN KEY (input_id) REFERENCES coin_inputs(id) ON DELETE CASCADE
+) engine=InnoDB;
+
+CREATE TABLE coin_unauthorized_sends (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	is_new TINYINT(1) NOT NULL DEFAULT 1, 
+	input_id INT NOT NULL, 
+	txid VARCHAR(255) NOT NULL, 
+	date_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+	FOREIGN KEY (input_id) REFERENCES coin_inputs (id) ON DELETE CASCADE
+) engine=InnoDB;
+
+CREATE TABLE products (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	is_enabled TINYINT(1) NOT NULL DEFAULT 1, 
+	amount DECIMAL(16,8) NOT NULL, 
+	currency ENUM('fiat','btc') NOT NULL DEFAULT 'fiat', 
+	date_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+	display_name VARCHAR(255) NOT NULL, 
+	description TEXT NOT NULL
+) engine=InnoDB charset=utf8;
+
+CREATE TABLE products_images (
+	id INT NOT NULL PRIMARY KEY, 
+	mime_type VARCHAR(100) NOT NULL, 
+	filename VARCHAR(100) NOT NULL, 
+	contents LONGTEXT NOT NULL
+) engine=InnoDB;
+
+INSERT INTO products_images VALUES (0, 'image/jpg', 'no_product.jpg', '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');
+
+CREATE TABLE invoices (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	wallet_id INT NOT NULL, 
+	userid INT NOT NULL, 
+	status ENUM('pending','paid','cancelled') NOT NULL DEFAULT 'pending', 
+	currency ENUM('fiat', 'btc') NOT NULL DEFAULT 'fiat', 
+	amount DECIMAL(12,2) NOT NULL, 
+	amount_btc DECIMAL(16,8) NOT NULL, 
+	amount_paid DECIMAL(16,8) NOT NULL DEFAULT 0, 
+	payment_address VARCHAR(80) NOT NULL, 
+	date_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
+	date_paid TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00', 
+	note TEXT NOT NULL, 
+	process_note TEXT NOT NULL, 
+	FOREIGN KEY (wallet_id) REFERENCES coin_wallets (id) ON DELETE CASCADE
+) engine=InnoDB;
+
+CREATE TABLE orders (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+	userid INT NOT NULL, 
+	product_id INT NOT NULL, 
+	status ENUM('pending','approved','declined') NOT NULL DEFAULT 'pending', 
+	amount DECIMAL(12,2) NOT NULL, 
+	amount_btc DECIMAL(16,8) NOT NULL, 
+	date_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,  
+	note TEXT NOT NULL, 
+	FOREIGN KEY (userid) REFERENCES users (id) ON DELETE CASCADE, 
+	FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
+) engine=InnoDB;
+

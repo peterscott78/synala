@@ -1,0 +1,15 @@
+.form_table { 
+	width: 95%;
+	margin-left: 25px;
+}
+
+.form_table td {
+	text-align: left;
+	vertical-align: top;
+	padding: 8px;
+}
+
+.form_table input[type=text], .form_table input[type=password], .form_table select, .form_table textarea {
+	width: 450px;
+}
+

@@ -1,0 +1,2 @@
+ERROR: Unable to connect to MySQL server! Error: Unknown database 'btc'ERROR: Unable to connect to MySQL server! Error: Unknown database 'btc'ERROR: Unable to connect to MySQL server! Error: Unknown database 'btc'ERROR: Unable to connect to MySQL server! Error: Unknown database 'btc'QUERY: SELECT name,value FROM config
+ERROR: Table 'btc.config' doesn't exist
