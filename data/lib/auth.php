@@ -64,7 +64,7 @@ public function check_login($type = 'public', $login_required = false) {
 // Login
 //////////////////////////////////////////////////////////////////////////
 
-private function login($type = 'public', $redirect = true) { 
+public function login($type = 'public', $redirect = true) { 
 
 	// Initialize
 	global $config;

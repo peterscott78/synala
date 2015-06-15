@@ -13,8 +13,8 @@ if (!is_writeable(SITE_PATH . '/data/backups')) {
 	$template->add_message("Unable to write to directory at /data/backups/.  Please change directory permissions appropriately, and reload the page.", 'error');
 	$checks_ok = false;
 }
-if (!is_writeable(SITE_PATH . '/data/logs')) { 
-	$template->add_message("Unable to write to directory at /data/logs/.  Please change directory permissions appropriately, and reload the page.", 'error');
+if (!is_writeable(SITE_PATH . '/data/log')) { 
+	$template->add_message("Unable to write to directory at /data/log/.  Please change directory permissions appropriately, and reload the page.", 'error');
 	$checks_ok = false;
 }
 if (!is_writeable(SITE_PATH . '/data/tpl_c')) { 
