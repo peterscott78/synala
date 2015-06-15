@@ -11,6 +11,12 @@ if (isset($_POST['submit']) && $_POST['submit'] == tr('Register Now')) {
 
 	// Redirect to payment, if needed
 	if ($template->has_errors != 1) { 
+
+		// Login
+		$auth = new auth();
+		$auth->login('public', false);
+
+		// Redirect, as needed
 		if ($_POST['is_payment'] == 1) { 
 			$template = new template('pay');
 			$template->add_message("Successfully created new user, $_POST[username].  You may now login with your account.");

@@ -98,6 +98,12 @@ public function __construct($parts = array()) {
 		// Check for errors
 		if ($template->has_errors == 1) { 
 			$template->route = 'admin/setup/first_time2';
+		} else { 
+
+			// Login
+			$auth = new auth();
+			$auth->login('admin', false);
+
 		}
 		echo $template->parse();
 		exit(0);
@@ -152,10 +158,6 @@ public function __construct($parts = array()) {
 	// Check if setup
 	if ($config['is_setup'] == 0) { 
 		$template = new template('admin/setup/first_time');
-		if (!is_writeable(SITE_PATH . '/data/config.php')) { $template->add_message("Unable to write to file at /data/config.php.  Please change file permissions appropriately, and reload the page.", 'error'); }
-		if (!is_writeable(SITE_PATH . '/data/backups')) { $template->add_message("Unable to write to directory at /data/backups/.  Please change directory permissions appropriately, and reload the page.", 'error'); }
-		if (!is_writeable(SITE_PATH . '/data/logs')) { $template->add_message("Unable to write to directory at /data/logs/.  Please change directory permissions appropriately, and reload the page.", 'error'); }
-		if (!is_writeable(SITE_PATH . '/data/tpl_c')) { $template->add_message("Unable to write to directory at /data/tpl_c/.  Please change directory permissions appropriately, and reload the page.", 'error'); }
 		echo $template->parse(); exit(0);
 	}
 

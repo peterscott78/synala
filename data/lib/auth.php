@@ -28,6 +28,16 @@ public function check_login($type = 'public', $login_required = false) {
 	// Check for session
 	$cookie_name = COOKIE_NAME . 'auth_hash';
 	if (isset($_COOKIE[$cookie_name]) && $row = DB::queryFirstRow("SELECT * FROM auth_sessions WHERE auth_hash = %s", hash('sha512', $_COOKIE[$cookie_name]))) { 
+
+		// Check 2FA
+		if ($row['2fa_status'] == 0) { 
+			$group_id = DB::queryFirstField("SELECT group_id FROM users WHERE id = %d", $row['userid']);
+			$route = $group_id == 1 ? 'admin/2fa' : '2fa';
+			$template = new template($route);
+			echo $template->parse(); exit(0);
+		}
+
+		// Update session
 		DB::query("UPDATE auth_sessions SET last_active = %d WHERE id = %d", time(), $row['id']);
 		return $row['userid'];
 
@@ -54,7 +64,7 @@ public function check_login($type = 'public', $login_required = false) {
 // Login
 //////////////////////////////////////////////////////////////////////////
 
-private function login($type = 'public') { 
+private function login($type = 'public', $redirect = true) { 
 
 	// Initialize
 	global $config;
@@ -114,9 +124,11 @@ private function login($type = 'public') {
 
 	// Redirect user
 	if ($status_2fa == 0) { 
-		
+		$route = $type == 'admin' ? 'admin/2fa' : '2fa';
+		$template = new template($route);
+		echo $template->parse(); exit(0);
 
-	} elseif ($type == 'admin') { 
+	} elseif ($type == 'admin' && $redirect === true) { 
 		header("Location: " . SITE_URI . "/admin/index");
 		exit(0);
 	}
