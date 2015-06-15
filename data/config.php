@@ -1,10 +1,10 @@
 <?php
-define('DBNAME', 'btc');
-define('DBUSER', 'root');
+define('DBNAME', '');
+define('DBUSER', '');
 define('DBPASS', '');
 define('DBHOST', 'localhost');
 define('DBPORT', '3306');
-define('COOKIE_NAME', 'nedVz3');
-define('ENCRYPT_PASS', 'cRePucres_Acra=u+#UDAc3a7paQA25s');
-define('TESTNET', 1);
+define('COOKIE_NAME', '');
+define('ENCRYPT_PASS', '');
+define('TESTNET', 0);
 ?>

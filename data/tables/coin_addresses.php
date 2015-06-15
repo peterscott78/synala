@@ -21,6 +21,7 @@ public function __construct($data = array()) {
 	);
 	$this->data = $data;
 	$this->wallet_id = isset($_POST['wallet_id']) && $_POST['wallet_id'] > 0 ? $_POST['wallet_id'] : 0;
+	$this->userid = isset($data['userid']) ? $data['userid'] : 0;
 
 }
 
@@ -33,6 +34,9 @@ public function get_total() {
 	// Get total rows
 	if (isset($_POST['search']) && $_POST['search'] != '') { 
 		$total = DB::queryFirstField("SELECT count(*) FROM coin_addresses WHERE address LIKE %ss", $_POST['search']);
+		if ($total == '') { $total = 0; }
+	} elseif ($this->userid > 0) { 
+		$total = DB::queryFirstField("SELECT count(*) FROM coin_addresses WHERE userid = %d", $this->userid);
 		if ($total == '') { $total = 0; }
 	} else { 
 		$total = DB::queryFirstField("SELECT count(*) FROM coin_addresses");
@@ -53,6 +57,8 @@ public function get_rows($start = 0) {
 	// Get rows to display
 	if (isset($_POST['search']) && $_POST['search'] != '') { 
 		$rows = DB::query("SELECT * FROM coin_addresses WHERE address LIKE %ss ORDER BY date_added DESC LIMIT $start,$this->rows_per_page", $_POST['search']);
+	} elseif ($this->userid > 0) { 
+		$rows = DB::query("SELECT * FROM coin_addresses WHERE userid = %d ORDER BY date_added DESC LIMIT $start,$this->rows_per_page");
 	} else { 
 		$rows = DB::query("SELECT * FROM coin_addresses ORDER BY date_added DESC LIMIT $start,$this->rows_per_page");
 	}

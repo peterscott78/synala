@@ -85,6 +85,7 @@ CREATE TABLE alerts (
 	userid INT NOT NULL, 
 	type ENUM('new_user', 'new_deposit', 'product_purchase', 'invoice_paid') NOT NULL, 
 	reference_id INT NOT NULL, 
+	amount DECIMAL(16,8) NOT NULL DEFAULT 0, 
 	date_added TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) engine=InnoDB;
 
@@ -94,7 +95,9 @@ CREATE TABLE auth_sessions (
 	last_active INT NOT NULL DEFAULT 0, 
 	login_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, 
 	logout_date TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00', 
-	auth_hash VARCHAR(130) NOT NULL UNIQUE
+	auth_hash VARCHAR(130) NOT NULL UNIQUE, 
+	2fa_status TINYINT(1) NOT NULL DEFAULT 1, 
+	2fa_hash VARCHAR(255) NOT NULL DEFAULT '', 
 ) engine=InnoDB;
 
 CREATE TABLE users_groups (

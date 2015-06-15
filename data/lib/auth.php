@@ -56,6 +56,9 @@ public function check_login($type = 'public', $login_required = false) {
 
 private function login($type = 'public') { 
 
+	// Initialize
+	global $config;
+
 	// Get user row
 	if (!$user_row = DB::queryFirstRow("SELECT * FROM users WHERE username = %s", strtolower($_POST['username']))) { 
 		$this->invalid_login($type);
@@ -73,11 +76,32 @@ private function login($type = 'public') {
 		$exists = DB::queryFirstRow("SELECT * FROM auth_sessions WHERE auth_hash = %s", hash('sha512', $session_id)) ? 1 : 0;
 	} while ($exists > 0);
 
+	// Check for 2FA
+	$require_2fa = false;
+	if ($config['enable_2fa'] == 'all') { $require_2fa = true; }
+	elseif ($config['enable_2fa'] == 'admin' && $user_row['group_id'] == 1) { $require_2fa = true; }
+
+	// Generate 2FA hash, if needed
+	if ($require_2fa === true) { 
+		$status_2fa = 0;
+		$hash_2fa = generate_random_string(60);
+
+		// Send e-mail
+		$url = "http://" . $_SERVER['HTTP_HOST'] . '/2fa/' . $hash_2fa;
+		mail($user_row['email'], "2FA Authentication - $config[site_name]", "You are receiving this e-mail because you just tried to login to $config[site_name], which required 2FA.  To proceed with your login, please click on the below URL:\r\n\r\n\t$url\r\n\r\nThank you,\r\n$config[site_name]\r\n");
+
+	} else {
+		$status_2fa = 1;
+		$hash_2fa = '';
+	}
+
 	// Create session
 	DB::insert('auth_sessions', array(
 		'userid' => $user_row['id'], 
 		'last_active' => time(), 
-		'auth_hash' => hash('sha512', $session_id))
+		'auth_hash' => hash('sha512', $session_id), 
+		'2fa_status' => $status_2fa, 
+		'2fa_hash' => $hash_2fa)
 	);
 
 	// Set cookie
@@ -89,7 +113,10 @@ private function login($type = 'public') {
 	DB::query("UPDATE alerts SET is_new = 2 WHERE is_new = 1 AND userid = %d", $user_row['id']);
 
 	// Redirect user
-	if ($type == 'admin') { 
+	if ($status_2fa == 0) { 
+		
+
+	} elseif ($type == 'admin') { 
 		header("Location: " . SITE_URI . "/admin/index");
 		exit(0);
 	}

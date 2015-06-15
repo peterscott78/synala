@@ -11,8 +11,8 @@ if (isset($_POST['btc_rpc_host'])) {
 	$rpc_port = $_POST['btc_rpc_port'];
 } else { 
 	$rpc_host = '127.0.0.1';
-	$rpc_user = generate_random_string(50);
-	$rpc_pass = generate_random_string(50);
+	$rpc_user = generate_random_string(20);
+	$rpc_pass = generate_random_string(20);
 	$rpc_port = rand(5000, 9999);
 }
 

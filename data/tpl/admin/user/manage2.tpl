@@ -77,7 +77,7 @@
 			<div class="box-header with-border">
 				<h3 class="box-title">Orders</h3><br /><br />
 
-				<p>Below lists the member's current profile.  You may make any desired changes below, and submit the form to save all changes.</p>
+				<p>Below lists all product orders made by this user.  You may view full details on any order by clicking the desired button below.</p>
 			</div>
 
 			{table alias="orders" userid="~userid~"}<br>
@@ -100,7 +100,9 @@
 			<div class="box-header with-border">
 				<h3 class="box-title">Invoices</h3><br /><br />
 
-				<p>Below lists the member's current profile.  You may make any desired changes below, and submit the form to save all changes.</p>
+				<p>Below lists all invoices created against this user's account.  You may view full details on any invoice by clicking the desired button below..</p>
+
+				{table alias="invoices" userid="~userid~"}<br />
 			</div>
 		</div>
 
@@ -108,7 +110,9 @@
 			<div class="box-header with-border">
 				<h3 class="box-title">Addresses</h3><br /><br />
 
-				<p>Below lists the member's current profile.  You may make any desired changes below, and submit the form to save all changes.</p>
+				<p>Below lists the all addresses assigned to the user's account.  You may view all transactions assigned to a specific address by clicking the desired link below.</p>
+
+				{table alias="coin_addresses" userid="~userid~"}<br />
 			</div>
 		</div>
 

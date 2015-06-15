@@ -120,7 +120,7 @@ private function set_base_variables() {
 		$user_message .= '<div class="callout callout-' . $css_type . ' text-center"><p><i class="icon fa fa-' . $icon . '"></i> ';
 		foreach ($this->user_messages[$type] as $msg) { 
 			if ($msg == '') { continue; }
-			$user_message .= "$msg";
+			$user_message .= "$msg<br />";
 		}
 		$user_message .= "</p></div>";
 	}

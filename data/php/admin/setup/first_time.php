@@ -9,6 +9,18 @@ if (!is_writeable(SITE_PATH . '/data/config.php')) {
 	$template->add_message("Unable to write to file at /data/config.php.  Please change file permissions appropriately, and reload the page.", 'error');
 	$checks_ok = false;
 }
+if (!is_writeable(SITE_PATH . '/data/backups')) { 
+	$template->add_message("Unable to write to directory at /data/backups/.  Please change directory permissions appropriately, and reload the page.", 'error');
+	$checks_ok = false;
+}
+if (!is_writeable(SITE_PATH . '/data/logs')) { 
+	$template->add_message("Unable to write to directory at /data/logs/.  Please change directory permissions appropriately, and reload the page.", 'error');
+	$checks_ok = false;
+}
+if (!is_writeable(SITE_PATH . '/data/tpl_c')) { 
+	$template->add_message("Unable to write to directory at /data/tpl_c/.  Please change directory permissions appropriately, and reload the page.", 'error');
+	$checks_ok = false;
+}
 
 // Check PHP extensions
 $extensions = array('openssl', 'curl', 'gmp', 'json', 'mcrypt', 'mysqli', 'mhash');
