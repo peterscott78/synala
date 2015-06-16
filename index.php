@@ -1,8 +1,5 @@
 <?php
 
-// Load
-include("load.php");
-
 // Get the page we're displaying from mod_rewrite rule
 $route = isset($_GET['route']) ? strtolower(trim($_GET['route'], '/')) : 'index';
 if (preg_match("/^\/(.+?)index\.php/", $_SERVER['PHP_SELF'], $match)) {
@@ -11,6 +8,9 @@ if (preg_match("/^\/(.+?)index\.php/", $_SERVER['PHP_SELF'], $match)) {
 }
 $parts = explode('/', trim(strtolower($route), '/\\'));
 if (!isset($parts[0])) { $parts[0] = 'public'; }
+
+// Load
+include("load.php");
 
 // Load controller class
 $controller = file_exists(SITE_PATH . '/data/controllers/' . $parts[0] . '.php') === true ? $parts[0] : 'default';

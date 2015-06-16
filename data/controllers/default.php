@@ -8,7 +8,7 @@ public function __construct($parts = array()) {
 	global $config, $template;
 
 	// Set variables
-	if ($config['is_setup'] == 1 && preg_match("/^\/admin\//", $_GET['route'])) { 
+	if ($config['is_setup'] == 1 && preg_match("/^admin/", trim($_GET['route'], '/'))) { 
 		$panel = 'admin';
 		$require_login = true;
 	} else { 
@@ -141,7 +141,8 @@ public function __construct($parts = array()) {
 		update_config_var('is_setup', '1');
 
 		// Get exchange date
-		get_coin_exchange_rate($config['currency']);
+		$rate = get_coin_exchange_rate($config['currency']);
+		if ($rate != 0) { update_config_var('exchange_rate', $rate); }
 
 		// Add wallet
 		$bip32 = new bip32();
