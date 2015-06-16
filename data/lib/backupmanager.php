@@ -45,7 +45,7 @@ public function perform_backup($full_backup = false) {
 
 	// Create dump command
 	$dump_command = $this->mysqldump . ' -u' . DBUSER;
-	if (DBPASS != '') { $dump_command = " -p'" . DBPASS . "'"; }
+	if (DBPASS != '') { $dump_command .= " -p'" . DBPASS . "'"; }
 	if (DBHOST != 'localhost') { $dump_command .= ' -h' . DBHOST; }
 	if (DBPORT != '3306') { $dump_command .= ' -P' . DBPORT; }
 	$dump_command .= ' ' . DBNAME . " > data/backups/" . $timestamp . ".sql";

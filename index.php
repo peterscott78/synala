@@ -5,6 +5,10 @@ include("load.php");
 
 // Get the page we're displaying from mod_rewrite rule
 $route = isset($_GET['route']) ? strtolower(trim($_GET['route'], '/')) : 'index';
+if (preg_match("/^\/(.+?)index\.php/", $_SERVER['PHP_SELF'], $match)) {
+	$route = str_replace($match[1], '', $route);
+	$_GET['route'] = $route;
+}
 $parts = explode('/', trim(strtolower($route), '/\\'));
 if (!isset($parts[0])) { $parts[0] = 'public'; }
 

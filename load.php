@@ -1,6 +1,7 @@
 <?php
 
 // Set variales
+define('VERSION', '0.1');
 if (!isset($_SERVER['REQUEST_METHOD'])) { $_SERVER['REQUEST_METHOD'] = 'POST'; }
 if (!isset($_GET['route'])) { $_GET['route'] = '/index'; }
 
