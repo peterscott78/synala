@@ -4,7 +4,7 @@
 global $template;
 
 // Get totals
-$total_funds_received = DB::queryFirstField("SELECT sum(amount) FROM coin_inputs");
+$total_funds_received = DB::queryFirstField("SELECT sum(amount) FROM coin_inputs WHERE is_change = 0");
 $total_new_deposits = DB::queryFirstField("SELECT count(*) FROM alerts WHERE type = 'new_deposit' AND userid = %d", $GLOBALS['userid']);
 $total_new_deposits_amount = DB::queryFirstField("SELECT sum(amount) FROM alerts WHERE type = 'new_deposit' AND userid = %d", $GLOBALS['userid']);
 $total_users = DB::queryFirstField("SELECT count(*) FROM users WHERE status != 'deleted'");
