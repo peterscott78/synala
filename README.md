@@ -11,7 +11,7 @@ If you need an easy to use, secure, quality online wallet to accept payments fro
 * LINUX server / VPS capable of running Bitcoin Core
 * Bitcoin Core v0.10.0+
 * One (1) clean mySQL database
-* ~60MB of HD space
+* ~15MB of HD space
 
 
 ## Installation
@@ -19,6 +19,8 @@ If you need an easy to use, secure, quality online wallet to accept payments fro
 Installation is extremely simple.  Download the archive of Synala, unzip it, and upload the contents to your server.  Once uploaded, simply open it in your web browser, and you will be prompted with a setup screen.  Follow the setup instructions, and once complete you will be ready to begin accepting Bitcoin payments.
 
 Synala does require Bitcoin Core on your server.  Please ensure you download a copy of the latest version from the [Bitcoin.Org Download Page](https://bitcoin.org/en/download), and upload the bin/bitcoind and bin/bitcoin-cli files to your server.  The Synala installation wizard will provide you with a sample bitcoin.conf file to use for Synala.
+
+**NOTE:** Synala only uses Bitcoin Core to watch txs flow through the blockchain, and to broadcast sends.  No funds are actually stored within the wallet.dat file, and all other actions (address generation, creating / signing txs) occur in-house within Synala.
 
 
 ##### Nginx Configuration
