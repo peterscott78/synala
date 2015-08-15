@@ -8,13 +8,13 @@
 	<div class="box-header with-border">
 		<h3 class="box-title">Bitcoind RPC</h3><br /><br />
 
-		<p>Synala requires that you have bitcoind running on your server, in order to watch transactions flow through the blockchain.  If needed, Synala comes with the LINUX 64bit binary of bitcoind, which you can find within the <i>/bitcoind/</i> directory.  Otherwise, you may download Bitcoin Core and view full instructions by visiting the <a href="http://bitcoin.org/" target="_blank">Bitcoin.Org</a> website.</p>
+		<p>Synala requires that you have bitcoind running on your server, in order to watch transactions flow through the blockchain.  If you do not already have bitcoind on this server, please download Bitcoin Core from the <a href="https://bitcoin.org/en/download" target="_blank">Bitcoin.Org Download Page</a>, and upload the /bin/bitcoind and /bin/bitcoin-cli files to your server.</p>
 
 		<p>To use the bitcoind binary included with Synala, simply complete the following steps:</p>
 
 		<ol>
 			<li>Login to your server, and create the file and directory at $HOME/.bitcoin/bitcoin.conf, with the contents being the below sample bitcoin.conf file.</li>
-			<li>SSH into your server, move to the <i>/bitcoind/</i> directory of Synala, and simply type: "./bitcoind"</li>
+			<li>SSH into your server, move to the directory where you uploaded <i>bitcoind</i>, and simply type: "./bitcoind"</li>
 			<li>Submit the below form as is.</li>
 		</ol>
 

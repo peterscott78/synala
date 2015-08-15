@@ -1,12 +1,24 @@
 Synala
 ==============
 
-Synala allows anyone to easily and securely accept Bitcoin payments online with virtually no fees (~0.0001 BTC to send funds), while always retaining 100% control over all funds.  This is an alternative to using the merchant services available, which charge fees in order to accept payments, and hold your funds in their wallets instead of your own.
+Synala allows anyone to easily and securely accept Bitcoin payments online with virtually no fees (~0.0001 BTC to send funds), and with no middle man, ensuring you always retain 100% control over all funds.  This is an alternative to using the merchant services available, which charge fees in order to accept payments, and hold your funds in their wallets instead of your own.
+
+If you need an easy to use, secure, quality online wallet to accept payments from customers / clients, then Synala is for you.  It fully supports multiple BIP32 wallets (standard and multi-sig), offline signing, user registration, invoices, products, and more.
+
+
+## Requirements
+
+* LINUX server / VPS capable of running Bitcoin Core
+* Bitcoin Core v0.10.0+
+* One (1) clean mySQL database
+* ~60MB of HD space
 
 
 ## Installation
 
 Installation is extremely simple.  Download the archive of Synala, unzip it, and upload the contents to your server.  Once uploaded, simply open it in your web browser, and you will be prompted with a setup screen.  Follow the setup instructions, and once complete you will be ready to begin accepting Bitcoin payments.
+
+Synala does require Bitcoin Core on your server.  Please ensure you download a copy of the latest version from the [Bitcoin.Org Download Page](https://bitcoin.org/en/download), and upload the bin/bitcoind and bin/bitcoin-cli files to your server.  The Synala installation wizard will provide you with a sample bitcoin.conf file to use for Synala.
 
 
 ##### Nginx Configuration
@@ -14,17 +26,17 @@ Installation is extremely simple.  Download the archive of Synala, unzip it, and
 If you are using Nginx instead of Apache, you must add a new <i>location</i> directive to your Nginx configuration file.  For example, if you uploaded the system into the /synala/ directory of your server, you would add the directive:
 
 ```
-location **/synala** {
+location /synala {
 	root    /home/username/public_html/synala
 	index   index.php;
 	send_timeout 180;
 	proxy_read_timeout 120;
 	proxy_connect_timeout 120;
-	try_files $uri $uri/ **/synala**/index.php?route=$uri&$args;
+	try_files $uri $uri/ /synala/index.php?route=$uri&$args;
 }
 ```
 
-Notice the two occurences of **/synala** in bold above, and ensure they're correct within your Nginx configuration.  Once the change has been made, restart Nginx, and everything should begin working properly.
+Notice the three occurences of **/synala** above, and ensure they're correct within your Nginx configuration.  Once the change has been made, restart Nginx, and everything should begin working properly.
 
 
 ## Templates
