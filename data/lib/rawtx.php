@@ -272,13 +272,21 @@ public function sign_transaction($transaction, $inputs) {
 //////////////////////////////////////////////////////////////////////////
 
 public function _encode_signature(Signature $signature) { 
-		
+
 	// Init
 	$client = new bip32();
+	$s_max = '7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0';
+	$s_stabilizer = 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141';
+
+	// Check for high S value
+	$s = gmp_init($signature->getS(), 10);
+	if (gmp_cmp($s, gmp_init($s_max, 16)) > 0) { 
+		$s = gmp_sub(gmp_init($s_stabilizer, 16), $s);
+	}
 
 	// Pad r and s to 64 characters.
 	$rh = str_pad($client->hex_encode($signature->getR()),64,'0', STR_PAD_LEFT);
-	$sh = str_pad($client->hex_encode($signature->getS()),64,'0', STR_PAD_LEFT);
+	$sh = str_pad($client->hex_encode(gmp_strval($s)), 64, '0', STR_PAD_LEFT);
 		
 	// Check if the first byte of each has its highest bit set, 
 	$t1 = unpack( "H*", (pack( 'H*',substr($rh, 0, 2)) & pack('H*', '80')));
