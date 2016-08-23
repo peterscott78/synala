@@ -181,7 +181,7 @@ public function check_block() {
 	// Check for 0 block
 	$blocknum = $vars['blocks'];
 	if ($config['blocknum'] == 0) { 
-		update_config_var($config['blocknum'], $blocknum);
+		update_config_var('blocknum', $blocknum);
 		return;
 	}
 
