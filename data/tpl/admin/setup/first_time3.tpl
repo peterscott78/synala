@@ -28,8 +28,7 @@
 rpcuser=<i>{$rpc_user}</i>
 rpcpassword=<i>{$rpc_pass}</i>
 rpcport=<i>{$rpc_port}</i>
-<font color="#cc0000">blocknotify=/usr/bin/php -q {$site_path}/bitcoind/process_block.php %s</font>
-<font color="#cc0000">walletnotify=/usr/bin/php -q {$site_path}/bitcoind/process_tx.php %s</font>
+<font color="#cc0000">walletnotify=/usr/bin/php -q {$site_path}/data/process_tx.php %s</font>
 </pre>
 
 		<p>To continue with setup, please enter the RPC connection information for bitcoind below.</p>

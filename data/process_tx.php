@@ -1,7 +1,7 @@
 <?php
 
 // Load
-$site_path = preg_replace("/bitcoind$/", "", realpath(dirname(__FILE__)));
+$site_path = preg_replace("/data$/", "", realpath(dirname(__FILE__)));
 require("$site_path/load.php");
 
 // Check transaction

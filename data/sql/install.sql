@@ -27,8 +27,9 @@ CREATE TABLE config (
 	value TEXT NOT NULL
 );
 
+INSERT INTO config (name, value) VALUES ('version', '0.3');
 INSERT INTO config (name, value) VALUES ('timezone', 'America/New_York');
-INSERT INTO config (name, value) VALUES ('session_expire_mins', '60');
+INSERT INTO config (name, value) VALUES ('session_expire_mins', '120');
 INSERT INTO config (name, value) VALUES ('username_field', 'username');
 INSERT INTO config (name, value) VALUES ('mcrypt_algorithm', 'none');
 INSERT INTO config (name, value) VALUES ('btc_rpc_host', '127.0.0.1');
@@ -56,6 +57,7 @@ INSERT INTO config (name, value) VALUES ('backup_ftp_port', '21');
 INSERT INTO config (name, value) VALUES ('backup_tarsnap_location', '/usr/bin/tarsnap');
 INSERT INTO config (name, value) VALUES ('backup_tarsnap_archive', '');
 INSERT INTO config (name, value) VALUES ('backup_expire_days', '5');
+INSERT INTO config (name, value) VALUES ('blocknum', '0');
 INSERT INTO config (name, value) VALUES ('is_setup', '0');
 
 
@@ -97,7 +99,7 @@ CREATE TABLE auth_sessions (
 	logout_date TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00', 
 	auth_hash VARCHAR(130) NOT NULL UNIQUE, 
 	2fa_status TINYINT(1) NOT NULL DEFAULT 1, 
-	2fa_hash VARCHAR(255) NOT NULL DEFAULT '', 
+	2fa_hash VARCHAR(255) NOT NULL DEFAULT ''
 ) engine=InnoDB;
 
 CREATE TABLE users_groups (

@@ -677,4 +677,25 @@ function get_coin_exchange_rate($currency) {
 
 }
 
+/////////////////////////////////////////////////////////////////////
+// Check for updates
+/////////////////////////////////////////////////////////////////////
+
+public function check_updates() { 
+
+	// Get version
+	if ($row = DB::queryFirstField("SELECT * FROM config WHERE name = 'version'")) { 
+		$version = $config['value'];
+	} else { $version = 0.0; }
+
+	// Upgrade, v0.3
+	if ($version < 0.3) { 
+		DB::insert('config', array('name' => 'blocknum', 'value' => '0'));
+		DB::insert('config', array('name' => 'version', 'value' => '0.3'));
+	}
+	
+
+
+}
+
 ?>

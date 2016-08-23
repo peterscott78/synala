@@ -5,6 +5,10 @@ Synala allows anyone to easily and securely accept Bitcoin payments online with 
 
 If you need an easy to use, secure, quality online wallet to accept payments from customers / clients, then Synala is for you.  It fully supports multiple BIP32 wallets (standard and multi-sig), offline signing, user registration, invoices, products, and more.
 
+## Changelog
+
+* v0.3 Released -- Please check our [blog post](http://envrin.com/blog/synala_0_3_upgrade) for full details.
+
 
 ## Requirements
 

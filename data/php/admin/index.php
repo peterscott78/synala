@@ -3,6 +3,9 @@
 // Initialize
 global $template;
 
+// Check updates
+check_updates();
+
 // Get totals
 $total_funds_received = DB::queryFirstField("SELECT sum(amount) FROM coin_inputs WHERE is_change = 0");
 $total_new_deposits = DB::queryFirstField("SELECT count(*) FROM alerts WHERE type = 'new_deposit' AND userid = %d", $GLOBALS['userid']);

@@ -13,6 +13,7 @@
 	contact your web host / server administrator.</p>
 
 <pre>
+*/5 * * * * cd {$site_path}/data/cron; /usr/bin/php -q check_block.php
 */30 * * * * cd {$site_path}/data/cron; /usr/bin/php -q exchange_rates.php
 1 */6 * * * cd {$site_path}/data/cron; /usr/bin/php -q backup.php
 </pre><br>

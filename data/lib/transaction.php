@@ -164,6 +164,40 @@ public function check_mempool() {
 }
 
 //////////////////////////////////////////////////////////////////////////
+// Check block
+//////////////////////////////////////////////////////////////////////////
+
+public function check_block() { 
+
+	// Initialize
+	global $config;
+	if (!isset($config['blocknum'])) { return; }
+
+	// Get current block num
+	try {
+		$vars = $this->client->getinfo();
+	} catch (Exception $e) { return false; }
+
+	// Check for 0 block
+	$blocknum = $vars['blocks'];
+	if ($config['blocknum'] == 0) { 
+		update_config_var($config['blocknum'], $blocknum);
+		return;
+	}
+
+	// Process blocks
+	while ($blocknum > $config['blocknum']) { 
+		$block_hash = $this->client->getblockhash((int) $crow['blocknum']);
+		$this->process_block($block_hash);
+		
+		$config['blocknum']++;
+		update_config_var('blocknum', $config['blocknum']);
+	}
+
+
+}
+
+//////////////////////////////////////////////////////////////////////////
 // Process block
 //////////////////////////////////////////////////////////////////////////
 
