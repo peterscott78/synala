@@ -209,7 +209,7 @@ public function process_block($block_hash) {
 	} catch (Exception $e) { return false; }
 
 	// Add confirmation
-	DB::query("UPDATE coin_inputs SET confirmations = confirmations + 1 WHERE confirmations > 0");
+	DB::query("UPDATE coin_inputs SET confirmations = confirmations + 1");
 	//DB::query("UPDATE coin_transactions SET confirmations = confirmations + 1 WHERE currency = %s", $this->currency);
 
 	// Set variables
