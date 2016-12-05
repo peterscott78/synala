@@ -681,7 +681,7 @@ function get_coin_exchange_rate($currency) {
 // Check for updates
 /////////////////////////////////////////////////////////////////////
 
-public function check_updates() { 
+function check_updates() { 
 
 	// Get version
 	if ($row = DB::queryFirstField("SELECT * FROM config WHERE name = 'version'")) { 

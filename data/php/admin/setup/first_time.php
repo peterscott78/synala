@@ -23,7 +23,7 @@ if (!is_writeable(SITE_PATH . '/data/tpl_c')) {
 }
 
 // Check PHP extensions
-$extensions = array('openssl', 'curl', 'gmp', 'json', 'mcrypt', 'mysqli', 'mhash');
+$extensions = array('openssl', 'curl', 'gmp', 'json', 'mcrypt', 'mysqli');
 foreach ($extensions as $ext) { 
 	if (!extension_loaded($ext)) {
 		$template->add_message("The PHP extension <b>$ext</b> is not installed.  Please contact your server administrator, have this extension installed, and reload the page.", 'error');
